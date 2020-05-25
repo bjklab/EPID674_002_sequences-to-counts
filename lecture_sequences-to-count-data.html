@@ -102,7 +102,7 @@ font-size: var(--code-inline-font-size);
 color: #990000;
 }
 .remark-slide-number {
-color: #011F5B;
+color: #000000;
 opacity: 1;
 font-size: 0.9em;
 }
@@ -356,25 +356,71 @@ class: center, middle, inverse
 
 ---
 
-Introduction to OTUs
+# What is amplicon/tag sequencing?
 
-Methods Used to Study the Microbiome
-Tag sequencing:
-Identify species by marker genes.
-16S rRNA gene for bacteria; 18S/ITS fungi
-DNA “library” produced by PCR using targeted primers
-Whole-genome “shotgun” metagenomic sequencing:
-sequence all DNA present
-“random” shearing and amplification to produce DNA library
+.pad-left[
+
+- Amplicon/tag sequence strategy:
+
+    - identify species by marker genes
+    
+    - 16S rRNA gene for bacteria and archaea
+    
+    - 18S/ITS for fungi
+
+    - DNA “library” produced by PCR using targeted primers
+
+- in contrast, whole-genome “shotgun” metagenomic sequencing involves sequencing all DNA present (i.e., “random” shearing and amplification to produce DNA library)
+
+]
+
 
 ---
-16S rRNA Gene
-“Universal” identifier for bacteria:
-present in every bacterial species (copy number varies
-highly conserved (functional RNA in ribosome; not translated)
-approximately 1500bp long
-primers land on conserved regions, amplify over variable region or regions
-sequencing over variable regions resolves source bacterium
+
+# How to bin amplicon gene sequences?
+
+.pad-left[
+
+- operational taxonomic units = __OTUs__ 
+
+- amplicon sequence variants = __ASVs__ 
+
+]
+
+
+---
+
+# 16S Ribosomal RNA (rRNA) Gene
+
+.pad-left[
+
+- “universal” identifier for bacteria:
+
+- present in every bacterial species (copy number varies)
+    
+- highly conserved (functional RNA in ribosome; not translated)
+    
+- approximately 1500bp long
+    
+- primers land on conserved regions, amplify over variable region or regions
+
+- sequencing over variable regions resolves source bacterium
+
+]
+
+
+---
+
+# 16S Ribosomal RNA (rRNA) Gene
+
+.pad-left[
+
+- __Reading:__ Yarza P, Yilmaz P, Pruesse E, Glöckner FO, Ludwig W, Schleifer K-H, Whitman WB, Euzéby J, Amann R, Rosselló-Móra R. Uniting the classification of cultured and uncultured bacteria and archaea using 16S rRNA gene sequences. Nat Rev Microbiol. 2014 Sep;12(9):635–645. Available from: http://dx.doi.org/10.1038/nrmicro3330 PMID: 25118885
+
+- __Reflection:__ How does 16S ribosomal RNA (rRNA) gene sequencing compare to the microscopy, selective stains, and biochemical assays used to characterize bacteria and archaea?
+
+]
+
 
 
 ---
@@ -622,6 +668,29 @@ https://github.com/biocore/deblur
 
 
 ---
+---
+background-image: url(svg/dna.svg)
+background-size: 500px
+background-position: 99% 50%
+class: center, middle, inverse
+
+# Metagenomic sequencing
+
+
+---
+
+# Metagenomic Sequence Generation
+
+.pad-left[
+
+- __Reading:__ Wood DE, Salzberg SL. Kraken: ultrafast metagenomic sequence classification using exact alignments. Genome Biol. 2014 Mar 3;15(3):R46. Available from: http://dx.doi.org/10.1186/gb-2014-15-3-r46 PMCID: PMC4053813
+
+- __Reading:__ Ghurye JS, Cepeda-Espinoza V, Pop M. Metagenomic Assembly: Overview, Challenges and Applications. Yale J Biol Med. 2016 Sep;89(3):353–362. Available from: https://www.ncbi.nlm.nih.gov/pubmed/27698619 PMCID: PMC5045144
+
+- __Reflection:__ Why might one prefer assignment of metagenomic reads over contig assembly? Why might one prefer contig assembly?
+
+]
+
 
 
 ---
