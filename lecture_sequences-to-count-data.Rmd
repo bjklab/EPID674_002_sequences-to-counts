@@ -1,0 +1,409 @@
+---
+title: "Sequences to Counts:</br>Making Microbiome Data"
+subtitle: "📚EPID 674📚"  
+author: "Brendan J. Kelly, MD, MS"
+date: 'Updated: `r format(Sys.Date(), "%d %B %Y")`'
+output:
+  xaringan::moon_reader:
+    self_contained: TRUE
+    lib_dir: libs
+    css: xaringan-themer-plus.css
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+background-image: url(svg/dna.svg)
+background-size: 500px
+background-position: 99% 50%
+class: middle, inverse
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-themer, include=FALSE, warning=FALSE, eval=FALSE}
+library(xaringanthemer)
+style_duo_accent(
+  primary_color = "#011F5B",
+  secondary_color = "#990000",
+  inverse_header_color = "#FFFFFF",
+  header_font_google = google_font("Roboto Condensed"),
+  text_font_google = google_font("Roboto"),
+  code_font_google = google_font("Roboto Mono"),
+  # padding = "64px 64px 64px 64px"
+  # base_font_size = "24px",
+  # text_font_base = "1rem",
+  # header_h1_font_size = "2.75rem",
+  # header_h2_font_size = "2rem",
+  # header_h3_font_size = "1.25rem",
+)
+```
+
+.pad-left[
+
+### Recap: data embed wet and dry lab choices
+
+### 16S ribosomal RNA (amplicon) sequencing
+
+### Metagenomic sequencing
+
+]
+
+
+
+---
+background-image: url(svg/dna.svg)
+background-size: 500px
+background-position: 99% 50%
+class: center, middle, inverse
+
+# Measurement process
+
+
+
+---
+
+# Wet Lab Decisions
+
+.pad-left[
+- Specimen acquisition:
+
+    - how are samples obtained?
+    
+    - how are samples processed? (e.g., cell-associated bacteria from BAL; difficult-to-lyse Mycobacteria or spores)
+
+- Sequencing library preparation:
+
+    - __amplicon sequencing__
+    
+    - __metagenomic sequencing__
+
+]
+
+
+---
+
+# Dry Lab Decisions
+
+.pad-left[
+
+- Sequence modality: short reads versus long reads?
+
+- Barcodes and de-multiplexing: Golay codes -- how much error is too much error?
+
+- Paired-end joining: how much overlap and how much error?
+
+- Sequence clustering:
+
+    - __amplicon: operational taxonomic units or sequence variants__
+    
+    - __metagenomic: assignment vs assembly__
+
+]
+
+
+---
+background-image: url(svg/dna.svg)
+background-size: 500px
+background-position: 99% 50%
+class: center, middle, inverse
+
+# 16S rRNA (amplicon) sequencing
+
+
+
+---
+
+Introduction to OTUs
+
+Methods Used to Study the Microbiome
+Tag sequencing:
+Identify species by marker genes.
+16S rRNA gene for bacteria; 18S/ITS fungi
+DNA “library” produced by PCR using targeted primers
+Whole-genome “shotgun” metagenomic sequencing:
+sequence all DNA present
+“random” shearing and amplification to produce DNA library
+
+---
+16S rRNA Gene
+“Universal” identifier for bacteria:
+present in every bacterial species (copy number varies
+highly conserved (functional RNA in ribosome; not translated)
+approximately 1500bp long
+primers land on conserved regions, amplify over variable region or regions
+sequencing over variable regions resolves source bacterium
+
+
+---
+Ashelford Appl Env Micro 2005.
+
+
+---
+Yarza P Nat Rev Micro 2014.
+
+
+
+---
+Operational Taxonomic Units
+OTUs: clusters of DNA sequences with similarity approximately equal to similarity across a defined species.
+Coined by Smith & Sokol, Principles of Numerical Taxonomy (1963): avoid definition that refers to established taxa.
+97% similarity threshold commonly applied to 16S from Stackebrandt & Goebel (1994): "homology values below about 97.5%... unlikely that two organisms have more than 60 to 70% DNA similarity and hence that they are related at the species level."
+
+
+---
+Methods of Forming OTUs
+DOTUR (2005): multiple alignment with all reads, distance matrix, cluster reads into OTUs based on distance matrix.
+CD-Hit (2006): sort reads by length, read by read -- if similar to existing cluster, place there; otherwise create new cluster
+Mothur (2009): replaces DOTUR.
+Uclust (2010): like CD-Hit, adopted by the QIIME pipeline
+SortMeRNA (2012): open-source replacement for Uclust.
+CROP (2011) - Gaussian mixture models.
+
+
+---
+Methods of Forming OTUs (continued)
+M-pick (2013): variable cluster size.
+Swarm (2014): uses single-linkage clustering, later splits clusters based on mixture models
+… newer methods to define “sequence variants” … to be discussed at the end of this class.
+
+
+---
+De Novo versus Reference-Based
+If very large number of sequences, clustering into “de novo” OTUs may be prohibitively slow.
+Why not just compare sequences to a reference database?
+
+
+---
+De Novo versus Reference-Based
+He J. Microbiome 2015: “many hierarchical and greedy clustering methods produce unstable OTUs, with membership that depends on the number of sequences clustered…. the closed-reference method is the only one that produces completely stable OTUs, with the caveat that sequences that do not match a pre-existing reference sequence collection are discarded.”
+
+
+---
+Han M Sci Reports 2016.
+
+
+
+---
+Validity?
+De novo OTUs?
+De novo OTUs from rarefied reads?
+Reference-based OTUs?
+Which clustering algorithm?
+Which reference database?
+OTU clusters are defined across the entire study… what happens when you re-analyze with new companion specimens?
+
+
+---
+Let’s Make an OTU Table
+
+
+---
+The Study
+You collect several hundred stool specimens and extract DNA.
+Purified DNA is amplified using primers for the V1-V2 variable region of the 16S rRNA gene:
+primers are barcoded: unique barcode for each specimen
+so many specimens that a single barcode won’t suffice -- you have to barcode both forward and reverse reads(barcodes are “error-correcting” Golay codes)
+Pool DNA from all specimens...
+
+
+---
+https://youtu.be/fCd6B5HRaZ8
+
+
+---
+FASTQ File Output
+Illumina raw data is in binary basecall (BCL) format, but is typically converted to FASTQ format for all downstream analyses.
+FASTQ: text-based sequence file format that stores both raw sequence data and quality scores; 4 lines per sequence:
+Line 1: begins with a '@' , sequence identifier & description
+Line 2: raw sequence letters
+Line 3: begins with a '+' , optional sequence identifier again
+Line 4: quality values for the sequence in Line 2
+
+
+---
+Let’s Make an OTU Table
+File:
+“epid_674_lecture2-making_otus.Rmd”
+Goals:
+inspecting raw sequence data
+practicing QIIME workflow to generate an OTU table
+Notes:
+lots of decisions embedded in this process, so re-run with different parameters and examine how output changes
+
+
+---
+Against OTUs
+
+
+
+---
+De Novo OTUs
+Cluster differ by less than a fixed sequence dissimilarity threshold (97%):
+“a common early step in amplicon-based microbial community analysis... to reduce the run time of subsequent analysis steps”
+many methods: OTUCLUST, Swarm, SUMACLUST, SortMeRNA, UCLUST, USEARCH, UPARSE
+OTUs are “emergent features of the dataset”
+dataset-dependence: boundaries and membership depend on dataset in which sequences are defined; even with infinite sequencing depth and 0 errors, OTUs depend on relative abund
+cannot compare DN OTUs defined in two different datasets
+Westcott & Schloss PeerJ 2015
+Kopylova mSystems 2016
+
+
+---
+Schloss & Westcott AEM 2011
+
+
+
+---
+Closed-Reference OTUs
+Reads sufficiently similar to a sequence in a reference database are recruited into the corresponding OTU (bins are taxonomic):
+OTUs are “properties of a reference database”
+reference sequences in the database define the labels (bins) associated with a closed-reference OTU
+valid comparison across data sets is possible, but only if the same reference database is used (i.e., consistent labeling)
+biological variation not represented in the reference database is necessarily lost during assignment to closed-reference OTUs
+
+
+---
+Sequence Variants
+Do novo process to discriminate biological sequences from sequence reading errors (typically on basis of number of repeated observations of distinct sequences, i.e. sequence abundance):
+cannot be performed independently on each read
+smallest unit of SV formation: a single sample
+nevertheless, “consistent labels because SVs represent a biological reality that exists outside of the data being analyzed”
+SVs from different samples can be validly compared**single-specimen vs all-specimen basis for error correction?
+
+
+---
+Eren et al Methods Ecol Evol 2013
+“Supervised” oligotyping:
+after alignment, concatenation of nucleotides from information-rich, variable positions in sequencing reads defines an oligotype
+strategies for identifying appropriate variable regions in a collection of reads range from simple measurements of sequence conservation to more sophisticated statistical techniques that employ complex models
+oligotyping software pipeline utilizes Shannon entropy as the default method to identify positional variation to facilitate the identification of nucleotide positions of interest
+start with OTUs & then discriminate error from true variation
+
+
+---
+Eren et al ISME Journal 2015
+“Supervised” oligotyping (prior method):
+can only be applied to closely related taxa (“many high-entropy locations among distant organisms makes supervision step arduous”)
+requires a prelim OTU clustering or taxonomic classification to identify related taxa; “oligotyping is not a stand-alone approach”
+“Unsupervised” oligotyping (new method):
+Minimum Entropy Decomposition (MED) efficiently partitions marker gene datasets into ‘MED nodes’ (homogeneous OTUs)
+employing Shannon entropy, use information-rich nucleotide positions & iteratively partitions large datasets
+iteratively decompose until the maximum entropy criterion satisfied for each final unit (i.e., until there is no entropy left to explain)
+
+
+---
+Tikhonov et al ISME Journal 2015
+“Clustering reads into OTUs underexploits quality of modern seq data”:
+combine error-model denoising and systematic cross-sample comparisons to resolve the fine (sub-OTU) structure of moderate-to-high-abundance community members (Illumina only)
+assign, for each sequence, its null-model abundance expected in that particular sample, using error rates estimated directly from the data
+from this, identify “candidate sequences”: those whose presence cannot be explained by a substitution-only error model
+candidate sequences selected via abundance criterion: abundance 10x greater than null model prediction and be no less than 10 counts
+retain all that pass this stringent filtering in at least 2 samples
+
+
+---
+Tikhonov et al ISME Journal 2015
+Substitution error model: “error clouds” around high-abundance sequences
+130nt sequence: 390 direct neighbors (Hamming distance 1)
+error rate ~ type of substitution (not position if only short reads)
+assign probabilities to substitution errors (per substitution type)
+identify neighbors that are outliers in their substitution category (based on z-scores: for each sequence we compare its raw cumulative abundance over all specimens to the mean in its substitution category, and normalize by the standard deviation in the category) -- likely correspond to true biological sequences
+exclude positions ~ strongest outliers; use remaining positions to estimate the error rates… probability of each type of the error
+
+
+
+---
+Tikhonov et al ISME Journal 2015
+Other error types (chimeras and PCR indels):
+PCR indel errors are context specific, no error model
+separate step in pipeline (DADA denoiser)
+likewise, filter chimeras with separate step (UCHIME)
+Implementation:
+Perl scripts
+designed for running on a per-sample basis
+permits running across multiple samples
+
+
+
+---
+Callahan et al Nature Methods 2016
+DADA2: disentangling biological variation from sequencing errors:
+rather than quality filtering and construction of OTUs, implement a “quality-aware model of Illumina amplicon errors”
+error model quantifies rate at which an amplicon read is produced from sequence as a function of sequence composition and quality
+Poisson model for the number of repeated observations of the sequence i, parameterized by the rate, then used to calculate the p-value of the null hypothesis that the number of amplicon reads (the abundance) of sequence i is consistent with the error model
+p-values = division criteria for an iterative partitioning algorithm, which continues dividing sequencing reads until all partitions are consistent with being produced from their central sequence
+
+
+---
+Callahan et al F1000 Research 2016
+Improve accuracy of abundance estimates by improving the manner in which reads are denoised and grouped -- RSVs (Ribosomal Sequence Variants) instead of the traditional OTUs:
+truncate reads to high-quality region: cut first 10nt from Illumina reads, cut end where quality scores begin to deteriorate)
+quality filter: max 2 expected errors per read
+use DADA2 method to to infer sequence variants based on parameterized model of substitution errors (unsupervised)
+DADA2 sequence inference method has 2 modes: independent inference by sample (pool=FALSE) & pooled inference (pool=TRUE)
+
+
+---
+Edgar RC bioaRxiv 2016
+UNOISE2: algorithm for denoising Illumina amplicon reads with comparable or better accuracy than DADA2:
+correct point errors (denoise) & filter chimeric amplicons to produce ZOTUs (zero-radius OTUs)
+cluster unique sequences by abundance: centroid has higher abundance and members have lower abundance
+centroids are assumed to be correct
+based on both abundance and skew from centroid (Levenshtein distance), members are discarded or kept
+user defines skew threshold (sensitivity/specificity)
+separate step for chimera removal
+
+---
+Consistent Labels
+SVs (like closed-reference OTUs) have advantage of consistency:
+computational tractability: don’t need to re-assign every time you split or combine data sets
+meta-analysis and replication: association between “denovo123” and condition of interest cannot be validated independently
+forward prediction: predictive biomarkers only useful if they can be applied to new data; as above, OTUs can’t move to new data set(though CR-OTUs can be extended to new data, any OTUs absent from reference database cannot)
+
+
+---
+Independence from Reference Data
+SVs (like de novo OTUs) are independent from reference database:
+diversity measurement: incomplete nature of reference database means unassigned OTUs are excluded from analysis (skew diversity)
+application across new environments: without reliance on reference databases, SVs (or de novo OTUs) extensible to new areas of study
+guaranteed observation: the SV was, in fact, observed; the taxon to which it best aligns may or may not have been
+changing references: closed reference OTUs built with different databases cannot be compared
+
+
+---
+Thompson LR et al Nature 2017.
+
+https://github.com/biocore/deblur
+
+
+
+
+---
+
+
+---
+class: center, middle, inverse
+background-image: url(svg/conjugation.svg)
+background-size: 500px
+background-position: 50% 50%
+
+# Questions?
+### Post to the discussion board!
+
+
+---
+background-image: url(svg/bacteria.svg)
+background-size: 100px
+background-position: 98% 90%
+class: center, middle
+
+# Thank you!
+#### Slides available: [github.com/bjklab](https://www.gihub.com/bjklab/microbiome-measures_01_data-and-danger)
+#### [brendank@pennmedicine.upenn.edu](brendank@pennmedicine.upenn.edu)
+
+
+
+

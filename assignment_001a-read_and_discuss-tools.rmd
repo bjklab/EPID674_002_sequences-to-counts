@@ -1,0 +1,109 @@
+---
+title: "Assignment: Read & Discuss"
+subtitle: "Your Own Research & The Microbiome"  
+author: 
+  - "Brendan J. Kelly, MD, MS"
+date: 'Updated: `r format(Sys.Date(), "%d %B %Y")`'
+output:
+  xaringan::moon_reader:
+    seal: FALSE
+    self_contained: TRUE
+    lib_dir: libs
+    css: xaringan-themer-plus.css
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+background-image: url(svg/reading.svg)
+background-size: 500px
+background-position: 50% 50%
+class: center, middle, inverse
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-themer, include=FALSE, warning=FALSE, eval=FALSE}
+library(xaringanthemer)
+style_duo_accent(
+  primary_color = "#011F5B",
+  secondary_color = "#990000",
+  inverse_header_color = "#FFFFFF",
+  header_font_google = google_font("Roboto Condensed"),
+  text_font_google = google_font("Roboto"),
+  code_font_google = google_font("Roboto Mono"),
+  # padding = "64px 64px 64px 64px"
+  # base_font_size = "24px",
+  # text_font_base = "1rem",
+  # header_h1_font_size = "2.75rem",
+  # header_h2_font_size = "2rem",
+  # header_h3_font_size = "1.25rem",
+)
+```
+
+# Assignment 001a
+
+
+
+---
+
+# Microbiome Analysis Review
+
+.pad-left[
+
+- __Read:__ Kuczynski J, Lauber CL, Walters WA, Parfrey LW, Clemente JC, Gevers D, Knight R. Experimental and analytical tools for studying the human microbiome. Nat Rev Genet. 2011 Dec 16;13(1):47–58. Available from: http://dx.doi.org/10.1038/nrg3129 PMCID: PMC5119550 
+  
+- __Reflect__ on the figure showing "Effects of primer choice in targeted amplicon sequencing."   
+
+]
+
+
+
+---
+
+# DNA Sequencing Review
+
+.pad-left[
+
+- __Read:__  Shendure J, Balasubramanian S, Church GM, Gilbert W, Rogers J, Schloss JA, Waterston RH. DNA sequencing at 40: past, present and future. Nature. Macmillan Publishers Limited, part of Springer Nature. All rights reserved.; 2017 Oct 19;550(7676):345–353. Available from: http://dx.doi.org/10.1038/nature24286 PMID: 29019985
+  
+- __Reflect__ on the section describing "Sequencers as a molecule counting device."   
+
+]
+
+
+
+---
+
+# Online Discussion
+
+.pad-left[
+
+- On the Canvas class discussion board, please tell us:
+
+    1. What is your research focus?
+    
+    2. If you do not already research the microbiome, how might the microbiome be relevant to your research? And how might the effect of primer choice on targeted amplicon sequencing impact microbiome studies in your field?
+    
+    3. If you do already research the microbiome, what sequencing methods do you use and why?
+
+
+]
+
+
+
+---
+background-image: url(svg/bacteria.svg)
+background-size: 100px
+background-position: 98% 90%
+class: center, middle
+
+# Thank you!
+#### Slides available: [github.com/bjklab](https://www.gihub.com/bjklab/microbiome-measures_01_data-and-danger)
+#### [brendank@pennmedicine.upenn.edu](brendank@pennmedicine.upenn.edu)
+
+
+
+
