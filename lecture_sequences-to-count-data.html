@@ -370,20 +370,7 @@ class: center, middle, inverse
 
     - DNA “library” produced by PCR using targeted primers
 
-- in contrast, whole-genome “shotgun” metagenomic sequencing involves sequencing all DNA present (i.e., “random” shearing and amplification to produce DNA library)
-
-]
-
-
----
-
-# How to bin amplicon gene sequences?
-
-.pad-left[
-
-- operational taxonomic units = __OTUs__ 
-
-- amplicon sequence variants = __ASVs__ 
+- in contrast, whole-genome “shotgun” metagenomic sequencing targets all DNA present (“random” shearing and amplification to produce DNA library)
 
 ]
 
@@ -424,62 +411,110 @@ class: center, middle, inverse
 
 
 ---
-Ashelford Appl Env Micro 2005.
+background-image: url(img/variable_regions_16S.png)
+background-size: contain
+
+.footnote[Ashelford _Appl Env Micro_ 2005]
 
 
 ---
-Yarza P Nat Rev Micro 2014.
+background-image: url(img/map_variable_regions_16S.png)
+background-size: contain
 
-
-
----
-Operational Taxonomic Units
-OTUs: clusters of DNA sequences with similarity approximately equal to similarity across a defined species.
-Coined by Smith &amp; Sokol, Principles of Numerical Taxonomy (1963): avoid definition that refers to established taxa.
-97% similarity threshold commonly applied to 16S from Stackebrandt &amp; Goebel (1994): &quot;homology values below about 97.5%... unlikely that two organisms have more than 60 to 70% DNA similarity and hence that they are related at the species level.&quot;
-
-
----
-Methods of Forming OTUs
-DOTUR (2005): multiple alignment with all reads, distance matrix, cluster reads into OTUs based on distance matrix.
-CD-Hit (2006): sort reads by length, read by read -- if similar to existing cluster, place there; otherwise create new cluster
-Mothur (2009): replaces DOTUR.
-Uclust (2010): like CD-Hit, adopted by the QIIME pipeline
-SortMeRNA (2012): open-source replacement for Uclust.
-CROP (2011) - Gaussian mixture models.
-
-
----
-Methods of Forming OTUs (continued)
-M-pick (2013): variable cluster size.
-Swarm (2014): uses single-linkage clustering, later splits clusters based on mixture models
-… newer methods to define “sequence variants” … to be discussed at the end of this class.
-
-
----
-De Novo versus Reference-Based
-If very large number of sequences, clustering into “de novo” OTUs may be prohibitively slow.
-Why not just compare sequences to a reference database?
-
-
----
-De Novo versus Reference-Based
-He J. Microbiome 2015: “many hierarchical and greedy clustering methods produce unstable OTUs, with membership that depends on the number of sequences clustered…. the closed-reference method is the only one that produces completely stable OTUs, with the caveat that sequences that do not match a pre-existing reference sequence collection are discarded.”
-
-
----
-Han M Sci Reports 2016.
+.footnote[Yarza P _Nat Rev Micro_ 2014]
 
 
 
 ---
-Validity?
-De novo OTUs?
-De novo OTUs from rarefied reads?
-Reference-based OTUs?
-Which clustering algorithm?
-Which reference database?
-OTU clusters are defined across the entire study… what happens when you re-analyze with new companion specimens?
+
+# How to bin amplicon gene sequences?
+
+.pad-left[
+
+- operational taxonomic units = __OTUs__ 
+
+    - de-novo OTUs
+    
+    - reference-based OTUs
+
+- amplicon sequence variants = __ASVs__ 
+
+    - incorporate sequence error-correction model
+    
+    - error model choices: DADA2, deblur, etc
+
+
+]
+
+
+---
+
+# Operational Taxonomic Units (OTUs)
+
+.pad-left[
+- OTUs: clusters of DNA sequences with similarity approximately equal to similarity across a defined species
+
+- Coined by Smith &amp; Sokol _Principles of Numerical Taxonomy_ (1963): avoid definition that refers to established taxa
+
+- 97% similarity threshold commonly applied to 16S from Stackebrandt &amp; Goebel (1994): &quot;homology values below about 97.5%... unlikely that two organisms have more than 60 to 70% DNA similarity and hence that they are related at the species level&quot;  
+    
+
+]
+
+
+---
+
+# Methods of Forming OTUs
+
+.pad-left[
+
+- DOTUR (2005): multiple alignment with all reads, distance matrix, cluster reads into OTUs based on distance matrix
+
+- CD-Hit (2006): sort reads by length, read by read -- if similar to existing cluster, place there; otherwise create new cluster
+
+- Mothur (2009): replaces DOTUR
+
+- Uclust (2010): like CD-Hit, adopted by the QIIME pipeline
+
+- M-pick (2013): variable cluster size
+
+- Swarm (2014): single-linkage clustering then split per mixture model
+
+]
+
+
+---
+
+# De Novo vs Reference-Based OTUs
+
+.pad-left[
+
+- If very large number of sequences, clustering into “de novo” OTUs may be prohibitively slow
+
+- Why not just compare sequences to a reference database?
+
+- He J. _Microbiome_ 2015: “many hierarchical and greedy clustering methods produce unstable OTUs, with membership that depends on the number of sequences clustered…. the closed-reference method is the only one that produces completely stable OTUs, with the caveat that sequences that do not match a pre-existing reference sequence collection are discarded.”
+
+]
+
+
+
+---
+# Which OTUs are valid?
+
+.pad-left[
+
+- De novo OTUs? De novo OTUs from rarefied reads?
+
+- Reference-based OTUs?
+
+- Which clustering algorithm? Which reference database?
+
+- OTU clusters are defined across the entire study…  
+
+- ... __what happens when you re-analyze with new companion specimens?__
+
+]
 
 
 ---
@@ -494,9 +529,6 @@ primers are barcoded: unique barcode for each specimen
 so many specimens that a single barcode won’t suffice -- you have to barcode both forward and reverse reads(barcodes are “error-correcting” Golay codes)
 Pool DNA from all specimens...
 
-
----
-https://youtu.be/fCd6B5HRaZ8
 
 
 ---
@@ -683,11 +715,68 @@ class: center, middle, inverse
 
 .pad-left[
 
+- whole-genome “shotgun” metagenomic sequencing:
+
+    - sequence all DNA present
+    
+    - “random” shearing and amplification to produce DNA library
+
+- (note: metatranscriptomics is the same applied to RNA)
+    
+- in contrast to amplicon sequencing, which targets a &quot;tag&quot; gene
+
+
+]
+
+
+
+---
+
+# Metagenomic Sequence Processing
+
+.pad-left[
+
+- Gene-level assignment of raw reads &amp; taxonomic transformation
+
+    - how to convert gene assignments into taxonomic assignments?
+    
+    - different models: Metaphlan2, Kraken, etc
+
+- &quot;Contig&quot; (contiguous sequence) assembly prior to assignment
+
+    - how best to assemble contigs?
+    
+    - if reliable contigs, taxonomic assignments may be more precise
+
+]
+
+
+
+---
+
+# Metagenomic Sequence Processing
+
+.pad-left[
+
 - __Reading:__ Wood DE, Salzberg SL. Kraken: ultrafast metagenomic sequence classification using exact alignments. Genome Biol. 2014 Mar 3;15(3):R46. Available from: http://dx.doi.org/10.1186/gb-2014-15-3-r46 PMCID: PMC4053813
+
+- __Reading:__ Segata N, Waldron L, Ballarini A, Narasimhan V, Jousson O, Huttenhower C. Metagenomic microbial community profiling using unique clade-specific marker genes. Nat Methods. 2012 Jun 10;9(8):811–814. Available from: http://dx.doi.org/10.1038/nmeth.2066 PMCID: PMC3443552
 
 - __Reading:__ Ghurye JS, Cepeda-Espinoza V, Pop M. Metagenomic Assembly: Overview, Challenges and Applications. Yale J Biol Med. 2016 Sep;89(3):353–362. Available from: https://www.ncbi.nlm.nih.gov/pubmed/27698619 PMCID: PMC5045144
 
-- __Reflection:__ Why might one prefer assignment of metagenomic reads over contig assembly? Why might one prefer contig assembly?
+]
+
+
+
+---
+
+# Metagenomic Sequence Processing
+
+.pad-left[
+
+- __Reflection:__ What are the advantages of read assignment? What are the advantages of contig assembly?
+
+- __Reflection:__ How are the accuracy of metagenomic assignments evaluated?
 
 ]
 
