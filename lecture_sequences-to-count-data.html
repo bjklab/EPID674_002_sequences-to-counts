@@ -268,7 +268,7 @@ class: center, middle, inverse, title-slide
 # Sequences to Counts:</br>Making Microbiome Data
 ## 📚EPID 674📚
 ### Brendan J. Kelly, MD, MS
-### Updated: 25 May 2020
+### Updated: 26 May 2020
 
 ---
 
@@ -370,7 +370,7 @@ class: center, middle, inverse
 
     - DNA “library” produced by PCR using targeted primers
 
-- in contrast, whole-genome “shotgun” metagenomic sequencing targets all DNA present (“random” shearing and amplification to produce DNA library)
+- In contrast, whole-genome “shotgun” metagenomic sequencing targets all DNA present (“random” shearing and amplification to produce DNA library)
 
 ]
 
@@ -381,19 +381,20 @@ class: center, middle, inverse
 
 .pad-left[
 
-- “universal” identifier for bacteria:
+- “Universal” identifier for bacteria:
 
-- present in every bacterial species (copy number varies)
+    - Present in every bacterial species (copy number varies)
     
-- highly conserved (functional RNA in ribosome; not translated)
+    - Highly conserved (functional RNA in ribosome; not translated)
     
-- approximately 1500bp long
+    - Approximately 1500bp long
     
-- primers land on conserved regions, amplify over variable region or regions
+    - Primers land on conserved regions, amplify over variable region or regions
 
-- sequencing over variable regions resolves source bacterium
+    - Sequencing over variable regions resolves source bacterium
 
 ]
+
 
 
 ---
@@ -403,6 +404,8 @@ class: center, middle, inverse
 .pad-left[
 
 - __Reading:__ Yarza P, Yilmaz P, Pruesse E, Glöckner FO, Ludwig W, Schleifer K-H, Whitman WB, Euzéby J, Amann R, Rosselló-Móra R. Uniting the classification of cultured and uncultured bacteria and archaea using 16S rRNA gene sequences. Nat Rev Microbiol. 2014 Sep;12(9):635–645. Available from: http://dx.doi.org/10.1038/nrmicro3330 PMID: 25118885
+
+- __(optional) Reading:__ David Quammen _The Tangled Tree of Life_ 2019
 
 - __Reflection:__ How does 16S ribosomal RNA (rRNA) gene sequencing compare to the microscopy, selective stains, and biochemical assays used to characterize bacteria and archaea?
 
@@ -431,13 +434,13 @@ background-size: contain
 
 .pad-left[
 
-- operational taxonomic units = __OTUs__ 
+- Operational taxonomic units = __OTUs__ 
 
     - de-novo OTUs
     
     - reference-based OTUs
 
-- amplicon sequence variants = __ASVs__ 
+- Amplicon sequence variants = __ASVs__ 
 
     - incorporate sequence error-correction model
     
@@ -452,12 +455,32 @@ background-size: contain
 # Operational Taxonomic Units (OTUs)
 
 .pad-left[
+
 - OTUs: clusters of DNA sequences with similarity approximately equal to similarity across a defined species
 
 - Coined by Smith &amp; Sokol _Principles of Numerical Taxonomy_ (1963): avoid definition that refers to established taxa
 
-- 97% similarity threshold commonly applied to 16S from Stackebrandt &amp; Goebel (1994): &quot;homology values below about 97.5%... unlikely that two organisms have more than 60 to 70% DNA similarity and hence that they are related at the species level&quot;  
+- 97% similarity threshold commonly applied to 16S:
+
+    - Stackebrandt &amp; Goebel _Int J Syst Evol Micro_ 1994: &quot;homology values below about 97.5%... unlikely that two organisms have more than 60 to 70% DNA similarity and hence that they are related at the species level&quot;  
     
+    
+]
+
+
+---
+
+# De Novo vs Reference-Based OTUs
+
+.pad-left[
+
+- De novo OTUs: cluster by less than a fixed sequence dissimilarity threshold (97%):
+
+    - dataset-dependence: boundaries and membership depend on dataset in which sequences are defined; even with infinite sequencing depth and 0 errors, OTUs depend on relative abundance across samples
+    
+    - cannot compare DN OTUs defined in two different datasets (Schloss &amp; Westcott _AEM_ 2011; Westcott &amp; Schloss _PeerJ_ 2015; Kopylova _mSystems_ 2016)
+
+    - with large number of sequences, clustering de novo OTUs may be prohibitively slow
 
 ]
 
@@ -489,11 +512,15 @@ background-size: contain
 
 .pad-left[
 
-- If very large number of sequences, clustering into “de novo” OTUs may be prohibitively slow
+- Reference-based OTUs: reads sufficiently similar to a sequence in a reference database are recruited into the corresponding OTU (bins are taxonomic):
 
-- Why not just compare sequences to a reference database?
+    - OTUs are “properties of a reference database”; reference sequences in the database define the labels (bins)
+    
+    - valid comparison across data sets is possible, but only if the same reference database is used
+    
+    - biological variation not in the reference database is lost
 
-- He J. _Microbiome_ 2015: “many hierarchical and greedy clustering methods produce unstable OTUs, with membership that depends on the number of sequences clustered…. the closed-reference method is the only one that produces completely stable OTUs, with the caveat that sequences that do not match a pre-existing reference sequence collection are discarded.”
+    - sequences that do not match reference are often discarded
 
 ]
 
@@ -518,188 +545,80 @@ background-size: contain
 
 
 ---
-Let’s Make an OTU Table
 
+# Amplicon Sequence Variants (ASVs)
 
----
-The Study
-You collect several hundred stool specimens and extract DNA.
-Purified DNA is amplified using primers for the V1-V2 variable region of the 16S rRNA gene:
-primers are barcoded: unique barcode for each specimen
-so many specimens that a single barcode won’t suffice -- you have to barcode both forward and reverse reads(barcodes are “error-correcting” Golay codes)
-Pool DNA from all specimens...
+.pad-left[
 
+- Do novo process to discriminate biological sequences from sequence reading errors (typically on basis of number of repeated observations of distinct sequences, i.e. sequence abundance):
 
+    - cannot be performed independently on each read
+    
+    - smallest unit of ASV formation: a single sample
+    
+    - nevertheless, consistent because ASVs &quot;represent a biological reality that exists outside of the data being analyzed”
+    
+- ASVs from different samples can be validly compared!
 
----
-FASTQ File Output
-Illumina raw data is in binary basecall (BCL) format, but is typically converted to FASTQ format for all downstream analyses.
-FASTQ: text-based sequence file format that stores both raw sequence data and quality scores; 4 lines per sequence:
-Line 1: begins with a '@' , sequence identifier &amp; description
-Line 2: raw sequence letters
-Line 3: begins with a '+' , optional sequence identifier again
-Line 4: quality values for the sequence in Line 2
-
-
----
-Let’s Make an OTU Table
-File:
-“epid_674_lecture2-making_otus.Rmd”
-Goals:
-inspecting raw sequence data
-practicing QIIME workflow to generate an OTU table
-Notes:
-lots of decisions embedded in this process, so re-run with different parameters and examine how output changes
-
-
----
-Against OTUs
+]
 
 
 
 ---
-De Novo OTUs
-Cluster differ by less than a fixed sequence dissimilarity threshold (97%):
-“a common early step in amplicon-based microbial community analysis... to reduce the run time of subsequent analysis steps”
-many methods: OTUCLUST, Swarm, SUMACLUST, SortMeRNA, UCLUST, USEARCH, UPARSE
-OTUs are “emergent features of the dataset”
-dataset-dependence: boundaries and membership depend on dataset in which sequences are defined; even with infinite sequencing depth and 0 errors, OTUs depend on relative abund
-cannot compare DN OTUs defined in two different datasets
-Westcott &amp; Schloss PeerJ 2015
-Kopylova mSystems 2016
 
+# Amplicon Sequence Variants (ASVs)
 
----
-Schloss &amp; Westcott AEM 2011
+.pad-left[
 
+- Progression of development for ASV (error-correction) approach:
 
-
----
-Closed-Reference OTUs
-Reads sufficiently similar to a sequence in a reference database are recruited into the corresponding OTU (bins are taxonomic):
-OTUs are “properties of a reference database”
-reference sequences in the database define the labels (bins) associated with a closed-reference OTU
-valid comparison across data sets is possible, but only if the same reference database is used (i.e., consistent labeling)
-biological variation not represented in the reference database is necessarily lost during assignment to closed-reference OTUs
-
-
----
-Sequence Variants
-Do novo process to discriminate biological sequences from sequence reading errors (typically on basis of number of repeated observations of distinct sequences, i.e. sequence abundance):
-cannot be performed independently on each read
-smallest unit of SV formation: a single sample
-nevertheless, “consistent labels because SVs represent a biological reality that exists outside of the data being analyzed”
-SVs from different samples can be validly compared**single-specimen vs all-specimen basis for error correction?
-
-
----
-Eren et al Methods Ecol Evol 2013
-“Supervised” oligotyping:
-after alignment, concatenation of nucleotides from information-rich, variable positions in sequencing reads defines an oligotype
-strategies for identifying appropriate variable regions in a collection of reads range from simple measurements of sequence conservation to more sophisticated statistical techniques that employ complex models
-oligotyping software pipeline utilizes Shannon entropy as the default method to identify positional variation to facilitate the identification of nucleotide positions of interest
-start with OTUs &amp; then discriminate error from true variation
-
-
----
-Eren et al ISME Journal 2015
-“Supervised” oligotyping (prior method):
-can only be applied to closely related taxa (“many high-entropy locations among distant organisms makes supervision step arduous”)
-requires a prelim OTU clustering or taxonomic classification to identify related taxa; “oligotyping is not a stand-alone approach”
-“Unsupervised” oligotyping (new method):
-Minimum Entropy Decomposition (MED) efficiently partitions marker gene datasets into ‘MED nodes’ (homogeneous OTUs)
-employing Shannon entropy, use information-rich nucleotide positions &amp; iteratively partitions large datasets
-iteratively decompose until the maximum entropy criterion satisfied for each final unit (i.e., until there is no entropy left to explain)
-
-
----
-Tikhonov et al ISME Journal 2015
-“Clustering reads into OTUs underexploits quality of modern seq data”:
-combine error-model denoising and systematic cross-sample comparisons to resolve the fine (sub-OTU) structure of moderate-to-high-abundance community members (Illumina only)
-assign, for each sequence, its null-model abundance expected in that particular sample, using error rates estimated directly from the data
-from this, identify “candidate sequences”: those whose presence cannot be explained by a substitution-only error model
-candidate sequences selected via abundance criterion: abundance 10x greater than null model prediction and be no less than 10 counts
-retain all that pass this stringent filtering in at least 2 samples
-
-
----
-Tikhonov et al ISME Journal 2015
-Substitution error model: “error clouds” around high-abundance sequences
-130nt sequence: 390 direct neighbors (Hamming distance 1)
-error rate ~ type of substitution (not position if only short reads)
-assign probabilities to substitution errors (per substitution type)
-identify neighbors that are outliers in their substitution category (based on z-scores: for each sequence we compare its raw cumulative abundance over all specimens to the mean in its substitution category, and normalize by the standard deviation in the category) -- likely correspond to true biological sequences
-exclude positions ~ strongest outliers; use remaining positions to estimate the error rates… probability of each type of the error
+    - Eren et al _Methods Ecol Evol_ 2013: “supervised” oligotyping -- after alignment, concatenation of nucleotides from information-rich, variable positions in sequencing reads defines an oligotype
+    
+    - Eren et al _ISME Journal_ 2015:  &quot;unsupervised” oligotyping -- minimum entropy decompensition to partition marker gene datasets iteratively
+    
+    - Tikhonov et al _ISME Journal_ 2015: “clustering reads into OTUs underexploits quality of modern seq data”
+    
+]
 
 
 
 ---
-Tikhonov et al ISME Journal 2015
-Other error types (chimeras and PCR indels):
-PCR indel errors are context specific, no error model
-separate step in pipeline (DADA denoiser)
-likewise, filter chimeras with separate step (UCHIME)
-Implementation:
-Perl scripts
-designed for running on a per-sample basis
-permits running across multiple samples
+
+# Amplicon Sequence Variants (ASVs)
+
+.pad-left[
+
+- Commonly used implementations:
+
+    - __DADA2__ (Callahan et al _Nature Methods_ 2016): &quot;disentangling biological variation from sequencing errors&quot; -- Poisson error model quantifies rate at which an amplicon read is produced from sequence as a function of sequence composition and quality
+
+    - __deblur__ (Amir A et al _mSystems_ 2017): uses Illumina MiSeq/HiSea error profiles to obtain putative error-free sequences
+
+
+]
 
 
 
 ---
-Callahan et al Nature Methods 2016
-DADA2: disentangling biological variation from sequencing errors:
-rather than quality filtering and construction of OTUs, implement a “quality-aware model of Illumina amplicon errors”
-error model quantifies rate at which an amplicon read is produced from sequence as a function of sequence composition and quality
-Poisson model for the number of repeated observations of the sequence i, parameterized by the rate, then used to calculate the p-value of the null hypothesis that the number of amplicon reads (the abundance) of sequence i is consistent with the error model
-p-values = division criteria for an iterative partitioning algorithm, which continues dividing sequencing reads until all partitions are consistent with being produced from their central sequence
 
+# Amplicon Sequence Variants (ASVs)
 
----
-Callahan et al F1000 Research 2016
-Improve accuracy of abundance estimates by improving the manner in which reads are denoised and grouped -- RSVs (Ribosomal Sequence Variants) instead of the traditional OTUs:
-truncate reads to high-quality region: cut first 10nt from Illumina reads, cut end where quality scores begin to deteriorate)
-quality filter: max 2 expected errors per read
-use DADA2 method to to infer sequence variants based on parameterized model of substitution errors (unsupervised)
-DADA2 sequence inference method has 2 modes: independent inference by sample (pool=FALSE) &amp; pooled inference (pool=TRUE)
+.pad-left[
 
+- Independent inference by sample
 
----
-Edgar RC bioaRxiv 2016
-UNOISE2: algorithm for denoising Illumina amplicon reads with comparable or better accuracy than DADA2:
-correct point errors (denoise) &amp; filter chimeric amplicons to produce ZOTUs (zero-radius OTUs)
-cluster unique sequences by abundance: centroid has higher abundance and members have lower abundance
-centroids are assumed to be correct
-based on both abundance and skew from centroid (Levenshtein distance), members are discarded or kept
-user defines skew threshold (sensitivity/specificity)
-separate step for chimera removal
+- Consistent labels (sequences themselves)
 
----
-Consistent Labels
-SVs (like closed-reference OTUs) have advantage of consistency:
-computational tractability: don’t need to re-assign every time you split or combine data sets
-meta-analysis and replication: association between “denovo123” and condition of interest cannot be validated independently
-forward prediction: predictive biomarkers only useful if they can be applied to new data; as above, OTUs can’t move to new data set(though CR-OTUs can be extended to new data, any OTUs absent from reference database cannot)
+- Computational tractability
 
+- Robust to combining data sets (facilitate meta-analysis and replication)
 
----
-Independence from Reference Data
-SVs (like de novo OTUs) are independent from reference database:
-diversity measurement: incomplete nature of reference database means unassigned OTUs are excluded from analysis (skew diversity)
-application across new environments: without reliance on reference databases, SVs (or de novo OTUs) extensible to new areas of study
-guaranteed observation: the SV was, in fact, observed; the taxon to which it best aligns may or may not have been
-changing references: closed reference OTUs built with different databases cannot be compared
+- Independent from reference data (like de novo OTUs; facilitate studies of new environments)
 
-
----
-Thompson LR et al Nature 2017.
-
-https://github.com/biocore/deblur
+]
 
 
 
-
----
 ---
 background-image: url(svg/dna.svg)
 background-size: 500px
@@ -709,21 +628,22 @@ class: center, middle, inverse
 # Metagenomic sequencing
 
 
+
 ---
 
 # Metagenomic Sequence Generation
 
 .pad-left[
 
-- whole-genome “shotgun” metagenomic sequencing:
+- Whole-genome “shotgun” metagenomic sequencing:
 
-    - sequence all DNA present
+    - sequence all DNA present (not restricted to bacteria/archaea)
     
     - “random” shearing and amplification to produce DNA library
 
-- (note: metatranscriptomics is the same applied to RNA)
-    
-- in contrast to amplicon sequencing, which targets a &quot;tag&quot; gene
+    - contrast to amplicon sequencing, which targets a &quot;tag&quot; gene
+
+- Metagenomic sequence reads can be analyzed themselves, or can be joined to form contigs prior to further analysis
 
 
 ]
@@ -777,6 +697,8 @@ class: center, middle, inverse
 - __Reflection:__ What are the advantages of read assignment? What are the advantages of contig assembly?
 
 - __Reflection:__ How are the accuracy of metagenomic assignments evaluated?
+
+- __Reflection:__ What are the advantages and disadvantages of metagenomic sequencing, versus amplicon sequencing, for your own research?
 
 ]
 
