@@ -1,0 +1,175 @@
+---
+title: "Code Exercise"
+subtitle: "HMP Data in RStudio"  
+author: 
+  - "Brendan J. Kelly, MD, MS"
+date: 'Updated: `r format(Sys.Date(), "%d %B %Y")`'
+output:
+  xaringan::moon_reader:
+    seal: FALSE
+    self_contained: TRUE
+    lib_dir: libs
+    css: xaringan-themer-plus.css
+    nature:
+      ratio: 16:9
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: false
+---
+background-image: url(svg/coding.svg)
+background-size: 500px
+background-position: 50% 50%
+class: center, middle, inverse
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+```
+
+```{r xaringan-themer, include=FALSE, warning=FALSE, eval=FALSE}
+library(xaringanthemer)
+style_duo_accent(
+  primary_color = "#011F5B",
+  secondary_color = "#990000",
+  inverse_header_color = "#FFFFFF",
+  header_font_google = google_font("Roboto Condensed"),
+  text_font_google = google_font("Roboto"),
+  code_font_google = google_font("Roboto Mono"),
+  # padding = "64px 64px 64px 64px"
+  # base_font_size = "24px",
+  # text_font_base = "1rem",
+  # header_h1_font_size = "2.75rem",
+  # header_h2_font_size = "2rem",
+  # header_h3_font_size = "1.25rem",
+)
+```
+
+# Assignment 002
+
+
+
+---
+
+# Examine an OTU Table in R
+
+.pad-left[
+
+- Go to the Human Microbiome Project (HMP): [https://www.hmpdacc.org/HMQCP/](https://www.hmpdacc.org/HMQCP/)
+
+- Examine the datasets available
+
+- Clone the second class repository:  
+  [https://github.com/bjklab/EPID674_002_sequences-to-counts.git](https://github.com/bjklab/EPID674_002_sequences-to-counts.git)
+
+- Install & load packages necessary to read the HMP OTU table (included in second class repository)
+
+- View the data & complete a brief assignment
+
+]
+
+
+---
+background-image: url(img/rstudiocloud_newproj.png)
+background-size: contain
+
+
+
+---
+background-image: url(img/rstudiocloud_repo.png)
+background-size: contain
+
+
+
+---
+
+# Using the [rstudio.cloud](https://rstudio.cloud) console
+
+.pull-left[
+
+```{r package-install, echo=TRUE, eval=FALSE, warning=FALSE, message=FALSE}
+
+# install necessary functions 
+# (first time only)
+install.packages('tidyverse')
+
+# load functions for use
+library(tidyverse) 
+
+
+```
+
+
+]
+
+.pull-right[
+
+- Code at right installs and loads the "tidyverse" package
+
+- The "tidyverse" package includes a set of other packages that permit streamlined data processing
+
+- See Hadley Wickham's _R For Data Science_: [https://r4ds.had.co.nz/](https://r4ds.had.co.nz/)
+
+
+]
+
+
+
+---
+
+# Using the [rstudio.cloud](https://rstudio.cloud) console
+
+.pull-left[
+
+```{r read-otu, echo=TRUE, eval=FALSE, warning=FALSE, message=FALSE}
+# make sure tidyverse loaded
+library(tidyverse)
+
+# load HMP V1-V3 OTU table 
+otu <- read_tsv(
+  file = "./data/otu_table_psn_v13.txt.gz",
+  skip = 1 # skips an empty first row
+)
+
+otu # show what you've read
+
+View(otu) # RStudio viewer
+
+```
+
+
+]
+
+.pull-right[
+
+```{r read-otu-out, ref.label="read-otu", echo=FALSE, message=FALSE, warning=FALSE, eval=FALSE}
+
+```
+
+
+]
+
+
+
+---
+background-image: url(svg/coding.svg)
+background-size: 500px
+background-position: 50% 50%
+class: center, middle, inverse
+
+# Done!
+### Post ??? to the discussion board!
+### Post answers to Canvas assingment!
+
+
+---
+background-image: url(svg/bacteria.svg)
+background-size: 100px
+background-position: 98% 90%
+class: center, middle
+
+# Thank you!
+#### Slides available: [github.com/bjklab](https://www.gihub.com/bjklab/microbiome-measures_01_data-and-danger)
+#### [brendank@pennmedicine.upenn.edu](brendank@pennmedicine.upenn.edu)
+
+
+
+
