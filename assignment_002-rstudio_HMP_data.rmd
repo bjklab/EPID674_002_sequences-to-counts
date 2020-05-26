@@ -67,8 +67,15 @@ style_duo_accent(
 ]
 
 
+
 ---
-background-image: url(img/rstudiocloud_newproj.png)
+background-image: url(img/hmpdacc.png)
+background-size: contain
+
+
+
+---
+background-image: url(img/hmpdacc_otus.png)
 background-size: contain
 
 
@@ -89,11 +96,11 @@ background-size: contain
 
 # install necessary functions 
 # (first time only)
+# (this will take a while)
 install.packages('tidyverse')
 
-# load functions for use
-library(tidyverse) 
-
+# load tidyverse functions
+library(tidyverse)
 
 ```
 
@@ -102,7 +109,7 @@ library(tidyverse)
 
 .pull-right[
 
-- Code at right installs and loads the "tidyverse" package
+- Code at left installs and loads the "tidyverse" package
 
 - The "tidyverse" package includes a set of other packages that permit streamlined data processing
 
@@ -114,8 +121,7 @@ library(tidyverse)
 
 
 ---
-
-# Using the [rstudio.cloud](https://rstudio.cloud) console
+exclude: TRUE
 
 .pull-left[
 
@@ -123,15 +129,23 @@ library(tidyverse)
 # make sure tidyverse loaded
 library(tidyverse)
 
-# load HMP V1-V3 OTU table 
+# load (trimmed) HMP V1-V3 OTU table 
+# (downloaded with Class 2 repository)
 otu <- read_tsv(
-  file = "./data/otu_table_psn_v13.txt.gz",
-  skip = 1 # skips an empty first row
+  file = 
+    "./data/otu_table_psn_v13_TRIMMED.txt.gz",
 )
+
+# note: full HMP table crashes rstudio.cloud
+# but if you're using your own computer...
+#
+# otu <- read_tsv(
+#   file = "./data/otu_table_psn_v13.txt.gz",
+#   skip = 1 # skips an empty first row
+# )
 
 otu # show what you've read
 
-View(otu) # RStudio viewer
 
 ```
 
@@ -140,13 +154,117 @@ View(otu) # RStudio viewer
 
 .pull-right[
 
-```{r read-otu-out, ref.label="read-otu", echo=FALSE, message=FALSE, warning=FALSE, eval=FALSE}
+```{r read-otu-out, ref.label="read-otu", echo=FALSE, message=FALSE, warning=FALSE}
 
 ```
 
 
 ]
 
+
+
+---
+
+```{r read-otu2, echo=TRUE, eval=TRUE, warning=FALSE, message=FALSE}
+# load (trimmed) HMP V1-V3 OTU table 
+# (downloaded with Class 2 repository)
+otu <- read_tsv(
+  file = "./data/otu_table_psn_v13_TRIMMED.txt.gz",
+)
+
+otu # show what you've read
+
+
+```
+
+
+
+
+---
+
+```{r read-otu3, echo=TRUE, eval=FALSE, warning=FALSE, message=FALSE}
+# note: full HMP table crashes rstudio.cloud
+# but if you're using your own computer...
+
+otu <- read_tsv(
+  file = "./data/otu_table_psn_v13.txt.gz",
+  skip = 1 # skips an empty first row
+)
+
+otu # show what you've read
+
+
+```
+
+
+
+
+---
+exclude: TRUE
+
+.pull-left[
+
+```{r read-map, echo=TRUE, eval=FALSE, warning=FALSE, message=FALSE}
+# make sure tidyverse loaded
+library(tidyverse)
+
+# load HMP sepcimen data 
+# (downloaded with Class 2 repository)
+specimens <- read_tsv(
+  file = 
+    "./data/v13_map_uniquebyPSN.txt.bz2",
+)
+
+
+specimens # show what you've read
+
+
+```
+
+
+]
+
+.pull-right[
+
+```{r read-map-out, ref.label="read-map", echo=FALSE, message=FALSE, warning=FALSE}
+
+```
+
+
+]
+
+
+
+---
+
+```{r read-map2, echo=TRUE, eval=TRUE, warning=FALSE, message=FALSE}
+# load HMP sepcimen data 
+# (downloaded with Class 2 repository)
+specimens <- read_tsv(
+  file = "./data/v13_map_uniquebyPSN.txt.bz2",
+)
+
+specimens # show what you've read
+
+
+```
+
+
+
+
+---
+
+# Questions
+
+.pad-left[
+
+- How many OTUs (rows) in the HMP V1-V3 OTU table?
+
+- How many specimens (rows) in the HMP specimen map?
+
+- Do you see any other OTU tables on the HMP DACC portal?
+
+]
 
 
 ---
@@ -156,8 +274,8 @@ background-position: 50% 50%
 class: center, middle, inverse
 
 # Done!
-### Post ??? to the discussion board!
-### Post answers to Canvas assingment!
+### Post questions to the discussion board!
+
 
 
 ---
@@ -167,7 +285,7 @@ background-position: 98% 90%
 class: center, middle
 
 # Thank you!
-#### Slides available: [github.com/bjklab](https://www.gihub.com/bjklab/microbiome-measures_01_data-and-danger)
+#### Slides available: [github.com/bjklab](https://github.com/bjklab/EPID674_002_sequences-to-counts.git)
 #### [brendank@pennmedicine.upenn.edu](brendank@pennmedicine.upenn.edu)
 
 

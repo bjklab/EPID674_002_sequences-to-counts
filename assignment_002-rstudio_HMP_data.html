@@ -297,8 +297,15 @@ class: center, middle, inverse
 ]
 
 
+
 ---
-background-image: url(img/rstudiocloud_newproj.png)
+background-image: url(img/hmpdacc.png)
+background-size: contain
+
+
+
+---
+background-image: url(img/hmpdacc_otus.png)
 background-size: contain
 
 
@@ -319,10 +326,11 @@ background-size: contain
 ```r
 # install necessary functions 
 # (first time only)
+# (this will take a while)
 install.packages('tidyverse')
 
-# load functions for use
-library(tidyverse) 
+# load tidyverse functions
+library(tidyverse)
 ```
 
 
@@ -330,7 +338,7 @@ library(tidyverse)
 
 .pull-right[
 
-- Code at right installs and loads the &quot;tidyverse&quot; package
+- Code at left installs and loads the &quot;tidyverse&quot; package
 
 - The &quot;tidyverse&quot; package includes a set of other packages that permit streamlined data processing
 
@@ -342,8 +350,7 @@ library(tidyverse)
 
 
 ---
-
-# Using the [rstudio.cloud](https://rstudio.cloud) console
+exclude: TRUE
 
 .pull-left[
 
@@ -352,15 +359,22 @@ library(tidyverse)
 # make sure tidyverse loaded
 library(tidyverse)
 
-# load HMP V1-V3 OTU table 
+# load (trimmed) HMP V1-V3 OTU table 
+# (downloaded with Class 2 repository)
 otu &lt;- read_tsv(
-  file = &quot;./data/otu_table_psn_v13.txt.gz&quot;,
-  skip = 1 # skips an empty first row
+  file = 
+    &quot;./data/otu_table_psn_v13_TRIMMED.txt.gz&quot;,
 )
 
-otu # show what you've read
+# note: full HMP table crashes rstudio.cloud
+# but if you're using your own computer...
+#
+# otu &lt;- read_tsv(
+#   file = &quot;./data/otu_table_psn_v13.txt.gz&quot;,
+#   skip = 1 # skips an empty first row
+# )
 
-View(otu) # RStudio viewer
+otu # show what you've read
 ```
 
 
@@ -369,10 +383,182 @@ View(otu) # RStudio viewer
 .pull-right[
 
 
+```
+## # A tibble: 43,140 x 22
+##    `#OTU ID` `700110831` `700021898` `700113546` `700016133` `700113545`
+##    &lt;chr&gt;           &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
+##  1 OTU_97.1            0           0           0           0           0
+##  2 OTU_97.10           0           0           0           0           0
+##  3 OTU_97.1…           0           0           0           0           0
+##  4 OTU_97.1…           0           0           0           0           0
+##  5 OTU_97.1…           0           0           0           0           0
+##  6 OTU_97.1…           0           0           0           0           0
+##  7 OTU_97.1…           0           0           0           0           0
+##  8 OTU_97.1…           0           0           0           0           0
+##  9 OTU_97.1…           0           0           0           0           0
+## 10 OTU_97.1…           0           0           0           0           0
+## # … with 43,130 more rows, and 16 more variables: `700015293` &lt;dbl&gt;,
+## #   `700103483` &lt;dbl&gt;, `700097251` &lt;dbl&gt;, `700024697` &lt;dbl&gt;, `700111520` &lt;dbl&gt;,
+## #   `700038545` &lt;dbl&gt;, `700037298` &lt;dbl&gt;, `700023638` &lt;dbl&gt;, `700016135` &lt;dbl&gt;,
+## #   `700038435` &lt;dbl&gt;, `700111591` &lt;dbl&gt;, `700109465` &lt;dbl&gt;, `700106547` &lt;dbl&gt;,
+## #   `700100244` &lt;dbl&gt;, `700114014` &lt;dbl&gt;, `Consensus Lineage` &lt;chr&gt;
+```
 
 
 ]
 
+
+
+---
+
+
+```r
+# load (trimmed) HMP V1-V3 OTU table 
+# (downloaded with Class 2 repository)
+otu &lt;- read_tsv(
+  file = &quot;./data/otu_table_psn_v13_TRIMMED.txt.gz&quot;,
+)
+
+otu # show what you've read
+```
+
+```
+## # A tibble: 43,140 x 22
+##    `#OTU ID` `700110831` `700021898` `700113546` `700016133` `700113545`
+##    &lt;chr&gt;           &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;       &lt;dbl&gt;
+##  1 OTU_97.1            0           0           0           0           0
+##  2 OTU_97.10           0           0           0           0           0
+##  3 OTU_97.1…           0           0           0           0           0
+##  4 OTU_97.1…           0           0           0           0           0
+##  5 OTU_97.1…           0           0           0           0           0
+##  6 OTU_97.1…           0           0           0           0           0
+##  7 OTU_97.1…           0           0           0           0           0
+##  8 OTU_97.1…           0           0           0           0           0
+##  9 OTU_97.1…           0           0           0           0           0
+## 10 OTU_97.1…           0           0           0           0           0
+## # … with 43,130 more rows, and 16 more variables: `700015293` &lt;dbl&gt;,
+## #   `700103483` &lt;dbl&gt;, `700097251` &lt;dbl&gt;, `700024697` &lt;dbl&gt;, `700111520` &lt;dbl&gt;,
+## #   `700038545` &lt;dbl&gt;, `700037298` &lt;dbl&gt;, `700023638` &lt;dbl&gt;, `700016135` &lt;dbl&gt;,
+## #   `700038435` &lt;dbl&gt;, `700111591` &lt;dbl&gt;, `700109465` &lt;dbl&gt;, `700106547` &lt;dbl&gt;,
+## #   `700100244` &lt;dbl&gt;, `700114014` &lt;dbl&gt;, `Consensus Lineage` &lt;chr&gt;
+```
+
+
+
+
+---
+
+
+```r
+# note: full HMP table crashes rstudio.cloud
+# but if you're using your own computer...
+
+otu &lt;- read_tsv(
+  file = &quot;./data/otu_table_psn_v13.txt.gz&quot;,
+  skip = 1 # skips an empty first row
+)
+
+otu # show what you've read
+```
+
+
+
+
+---
+exclude: TRUE
+
+.pull-left[
+
+
+```r
+# make sure tidyverse loaded
+library(tidyverse)
+
+# load HMP sepcimen data 
+# (downloaded with Class 2 repository)
+specimens &lt;- read_tsv(
+  file = 
+    &quot;./data/v13_map_uniquebyPSN.txt.bz2&quot;,
+)
+
+
+specimens # show what you've read
+```
+
+
+]
+
+.pull-right[
+
+
+```
+## # A tibble: 2,970 x 11
+##    `#SampleID`   RSID visitno sex   RUNCENTER HMPbodysubsite Description X8   
+##          &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;          &lt;chr&gt;       &lt;lgl&gt;
+##  1   700013549 1.58e8       1 fema… BCM       Stool          HMP_Human_… NA   
+##  2   700014386 1.58e8       1 male  BCM,BI    Stool          HMP_Human_… NA   
+##  3   700014403 1.58e8       1 male  BCM,BI    Saliva         HMP_Human_… NA   
+##  4   700014409 1.58e8       1 male  BCM,BI    Tongue_dorsum  HMP_Human_… NA   
+##  5   700014412 1.58e8       1 male  BCM,BI    Hard_palate    HMP_Human_… NA   
+##  6   700014415 1.58e8       1 male  BCM,BI    Buccal_mucosa  HMP_Human_… NA   
+##  7   700014418 1.58e8       1 male  BCM,BI    Attached_Kera… HMP_Human_… NA   
+##  8   700014421 1.58e8       1 male  BCM,BI    Palatine_Tons… HMP_Human_… NA   
+##  9   700014424 1.58e8       1 male  BCM,BI    Throat         HMP_Human_… NA   
+## 10   700014427 1.58e8       1 male  BCM,BI    Supragingival… HMP_Human_… NA   
+## # … with 2,960 more rows, and 3 more variables: X9 &lt;lgl&gt;, X10 &lt;lgl&gt;, X11 &lt;dbl&gt;
+```
+
+
+]
+
+
+
+---
+
+
+```r
+# load HMP sepcimen data 
+# (downloaded with Class 2 repository)
+specimens &lt;- read_tsv(
+  file = &quot;./data/v13_map_uniquebyPSN.txt.bz2&quot;,
+)
+
+specimens # show what you've read
+```
+
+```
+## # A tibble: 2,970 x 11
+##    `#SampleID`   RSID visitno sex   RUNCENTER HMPbodysubsite Description X8   
+##          &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;          &lt;chr&gt;       &lt;lgl&gt;
+##  1   700013549 1.58e8       1 fema… BCM       Stool          HMP_Human_… NA   
+##  2   700014386 1.58e8       1 male  BCM,BI    Stool          HMP_Human_… NA   
+##  3   700014403 1.58e8       1 male  BCM,BI    Saliva         HMP_Human_… NA   
+##  4   700014409 1.58e8       1 male  BCM,BI    Tongue_dorsum  HMP_Human_… NA   
+##  5   700014412 1.58e8       1 male  BCM,BI    Hard_palate    HMP_Human_… NA   
+##  6   700014415 1.58e8       1 male  BCM,BI    Buccal_mucosa  HMP_Human_… NA   
+##  7   700014418 1.58e8       1 male  BCM,BI    Attached_Kera… HMP_Human_… NA   
+##  8   700014421 1.58e8       1 male  BCM,BI    Palatine_Tons… HMP_Human_… NA   
+##  9   700014424 1.58e8       1 male  BCM,BI    Throat         HMP_Human_… NA   
+## 10   700014427 1.58e8       1 male  BCM,BI    Supragingival… HMP_Human_… NA   
+## # … with 2,960 more rows, and 3 more variables: X9 &lt;lgl&gt;, X10 &lt;lgl&gt;, X11 &lt;dbl&gt;
+```
+
+
+
+
+---
+
+# Questions
+
+.pad-left[
+
+- How many OTUs (rows) in the HMP V1-V3 OTU table?
+
+- How many specimens (rows) in the HMP specimen map?
+
+- Do you see any other OTU tables on the HMP DACC portal?
+
+]
 
 
 ---
@@ -382,8 +568,8 @@ background-position: 50% 50%
 class: center, middle, inverse
 
 # Done!
-### Post ??? to the discussion board!
-### Post answers to Canvas assingment!
+### Post questions to the discussion board!
+
 
 
 ---
@@ -393,7 +579,7 @@ background-position: 98% 90%
 class: center, middle
 
 # Thank you!
-#### Slides available: [github.com/bjklab](https://www.gihub.com/bjklab/microbiome-measures_01_data-and-danger)
+#### Slides available: [github.com/bjklab](https://github.com/bjklab/EPID674_002_sequences-to-counts.git)
 #### [brendank@pennmedicine.upenn.edu](brendank@pennmedicine.upenn.edu)
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
